@@ -5,19 +5,21 @@
  */
 package ex02;
 
+import java.beans.*;
+import java.io.Serializable;
 import javax.swing.JLabel;
 
 /**
  *
  * @author Lorenzo Volpi
  */
-public class TempLabel extends JLabel {
-
+public class TempLabel extends JLabel implements Serializable {
+    
     @Override
     public void setText(String text) {
-        if(text.length() == 0) super.setText(text);
+        String s;
+        if(text.length() == 0) s = text;
         else {
-            String s = "";
             if(text.endsWith("C")){
                 s = text.substring(0, text.length()-1).trim();
             } else s = text.trim();
@@ -27,9 +29,8 @@ public class TempLabel extends JLabel {
             c+= 32.0;
 
             s = c + " F";
-            super.setText(s);
-            
         }
+        super.setText(s);
     }
     
 }
