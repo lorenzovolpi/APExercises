@@ -1,76 +1,79 @@
-module Ex1 (
-    wf,
-    empty,
-    singleton,
-    fromList,
-    isEmpty,
-    mul,
-    toList,
-    sumBag) where
+module Ex1 where
 
     data ListBag a = LB [(a, Int)]
         deriving (Show, Eq)
 
+    checkSingle :: Eq a => [a] -> ListBag a -> Bool
     checkSingle acc (LB ((x, i):xs)) = (not (elem x acc)) && (checkSingle (x:acc) (LB xs))
     checkSingle acc (LB []) = True
 
+    insertReorder :: Eq t => [t] -> t -> [t]
     insertReorder [] x = [x]
     insertReorder (a:acc) x 
         | x == a = x:a:acc
         | otherwise = a:(insertReorder acc x)
 
+    reorderList :: Eq t => [t] -> [t] -> [t]
     reorderList acc [] = acc
     reorderList acc (x:xs) = reorderList (insertReorder acc x) xs
 
+    insertLB :: Eq a => ListBag a -> a -> ListBag a
     insertLB (LB []) x = LB [(x, 1)]
     insertLB (LB ((a, i):acc)) x
         | (x == a) = (LB ((a, i+1):acc))
         | otherwise = LB ((x, 1):(a, i):acc)
 
+    accLB :: Eq a => ListBag a -> [a] -> ListBag a
     accLB acc [] = acc
     accLB acc (x:xs) = accLB (insertLB acc x) xs
 
+    addCP :: (Eq t1, Num t) => [(t1, t)] -> (t1, t) -> [(t1, t)]
     addCP [] (b, j) = [(b, j)]
     addCP ((a, i):acc) (b, j)
         | a == b = (a, i+j):acc
         | otherwise = (a, i):(addCP acc (b, j))
 
+    sumLB :: Eq a => ListBag a -> ListBag a -> ListBag a
+    sumLB (LB lba) (LB []) = (LB lba)
+    sumLB (LB lba) (LB (l:lbb)) =
+        sumLB (LB (addCP lba l)) (LB lbb)
+
+    fw :: Eq a => ListBag a -> ListBag a
+    fw lb = sumLB empty lb
+    
+    wf :: Eq a => ListBag a -> Bool
     wf lb = checkSingle [] lb
 
+    empty :: ListBag a
     empty = LB []
 
+    singleton :: a -> ListBag a
     singleton v = LB [(v, 1)]
 
+    fromList :: Eq a => [a] -> ListBag a
     fromList lst = accLB empty l
         where l = reorderList [] lst
 
+    isEmpty :: ListBag t -> Bool
     isEmpty (LB lst) = case lst of
         [] -> True
         x:xs -> False
 
+    mul :: Eq a => a -> ListBag a -> Int
     mul v (LB []) = 0
     mul v (LB ((a, i):lb))
         | v == a = i 
         | otherwise = mul v (LB lb)
 
+    toList :: ListBag a -> [a]
     toList (LB []) = []
     toList (LB ((a, i):lb)) 
         | i > 0 = a:(toList (LB ((a, i-1):lb)))
         | otherwise = toList (LB lb)
 
-    sumBag (LB lb1) (LB []) = LB lb1
-    sumBag (LB lb1) (LB (l:lb2)) =
-        sumBag (LB (addCP lb1 l)) (LB lb2)
+    sumBag :: Eq a => ListBag a -> ListBag a -> ListBag a
+    sumBag bag bag'
+        | wf bag = sumLB bag bag'
+        | otherwise = sumLB (fw bag) bag'
 
-    -- main = do
-    --     print $ wf $ LB [("d", 3), ("k", 7)]
-    --     print $ wf $ LB [("d", 3), ("k", 7), ("d", 1)]
-    --     print $ fromList [1,2,3,1,2,1,3,1,1,2,3,1,2,1,3,4,1,2,3,4,1,3,2,1,1,1,2]  
-    --     print $ wf $ fromList [1,2,3,1,2,1,3,1,1,2,3,1,2,1,3,4,1,2,3,4,1,3,2,1,1,1,2]  
-    --     print $ isEmpty (LB [])      
-    --     print $ isEmpty (singleton "d")
-    --     print $ mul 3 $ fromList [1,2,3,1,2,1,3,1,1,2,3,1,2,1,3,4,1,2,3,4,1,3,2,1,1,1,2]
-    --     print $ mul 6 $ fromList [1,2,3,1,2,1,3,1,1,2,3,1,2,1,3,4,1,2,3,4,1,3,2,1,1,1,2]
-    --     print $ toList $ fromList [1,2,3,1,2,1,3,1,1,2,3,1,2,1,3,4,1,2,3,4,1,3,2,1,1,1,2]
-    --     print $ sumBag (LB [("d", 3), ("k", 7)]) (LB [("d", 1)])
-    --     print $ sumBag (LB [("d", 3), ("k", 7)]) (LB [("d", 3), ("k", 7), ("d", 1)])
+        
