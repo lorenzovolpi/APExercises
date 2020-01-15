@@ -5,6 +5,8 @@
  */
 package mapreduce.volpi;
 
+import java.nio.file.Paths;
+
 /**
  *
  * @author Lorenzo Volpi
@@ -15,7 +17,10 @@ public class MapReduceVolpi {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        if(args.length > 0) {
+            CountingWords cw = new CountingWords(Paths.get(args[0]));
+            cw.compute();
+        }
     }
     
 }
