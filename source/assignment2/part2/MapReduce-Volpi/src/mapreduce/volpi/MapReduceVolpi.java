@@ -18,8 +18,8 @@ public class MapReduceVolpi {
      */
     public static void main(String[] args) {
         if(args.length > 0) {
-            CountingWords cw = new CountingWords(Paths.get(args[0]));
-            cw.compute();
+            InvertedIndex ii = new InvertedIndex(Paths.get(args[0]));
+            ii.compute();
         }
     }
     
