@@ -7,6 +7,7 @@ package testalgs;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
  *
  * @author Lorenzo Volpi
  */
-public class TestAlgs {
+public class TestAlgsPlus {
     
     private static Map<String, Class> loadClasses(Path dir) {
         Map<String, Class> res = new HashMap<>();
@@ -87,23 +88,34 @@ public class TestAlgs {
                         
                         System.out.println(c.getName() + ":");
                         Constructor constr;
-                        Method enc = null, dec = null;
+                        Method enc = null, dec = null, aenc = null, adec = null;
                         try {
                             constr = c.getConstructor(String.class);
                             Method[] ms = c.getMethods();
                             for (Method m : ms) {
                                 if(m.getName().startsWith("enc") && m.getParameterCount() == 1 && m.getParameterTypes()[0].equals(String.class)) enc = m;
                                 if(m.getName().startsWith("dec") && m.getParameterCount() == 1 && m.getParameterTypes()[0].equals(String.class)) dec = m;
-                            }
-                            if(enc == null) {
-                                System.out.println("\tThe class has no public method which name starts with \"enc\" and with a single String parameter.");
-                                continue;
-                            }
-                            if(dec == null) {
-                                System.out.println("\tThe class has no public method which name starts with \"dec\" and with a single String parameter.");
-                                continue;
+                                
+                                Boolean hase = false, hasd = false;
+                                for(Annotation a : m.getAnnotations()) {
+                                    if (a.toString().equals("@crypto.annot.Encrypt()")) hase = true;
+                                    if (a.toString().equals("@crypto.annot.Decrypt()")) hasd = true;
+                                }
+                                
+                                if(hase && m.getParameterCount() == 1 && m.getParameterTypes()[0].equals(String.class)) aenc = m;
+                                if(hasd && m.getParameterCount() == 1 && m.getParameterTypes()[0].equals(String.class)) adec = m;
                             }
                             
+                            if(enc == null || dec == null) {
+                                if(aenc != null && adec != null) {
+                                    enc = aenc;
+                                    dec = adec;
+                                } else {
+                                    System.out.println("\tThe class has no public method for Encryption/Decryption.");
+                                    continue;
+                                }
+                            }
+
                         } catch (NoSuchMethodException ex) {
                             System.out.println("\tThe class has no public constructor with a signle String parameter.");
                             continue;
@@ -142,7 +154,7 @@ public class TestAlgs {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(TestAlgs.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestAlgsPlus.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
