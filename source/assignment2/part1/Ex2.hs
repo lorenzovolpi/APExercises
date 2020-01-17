@@ -2,12 +2,13 @@ module Ex2 where
 
     import Ex1
 
-    foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
     instance Foldable ListBag where
         foldr f z (LB []) = z
         foldr f z (LB ((a, i):lb)) =
             f a (foldr f z (LB lb))
 
+    -- Funzione che mappa una funzione presa come paramentro su
+    -- ogni elemento di un ListBag
     mapLB :: Eq a => (t -> a) -> ListBag t -> ListBag a
     mapLB f (LB lb)
         | wf mapped = mapped

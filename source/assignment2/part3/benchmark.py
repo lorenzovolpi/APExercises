@@ -5,6 +5,12 @@ import requests
 import os
 
 def benchmark(_func=None, *, warmups=0, iter=1, verbose=False, csv_file=None):
+    """
+    Decorator parametrico che esegue dei warmup prima delle esecuzioni effettive
+    della funzione decorata. Calcola poi la media e la varianza delle esecuzioni
+    e mostra una tabella riassuntisa sullo standard output. Se richiesto mostra anche
+    i tempi ottenuti e li salva su un file.
+    """
     def benchmark_dec(f):
         def benchmark_wrap(*args, **kwargs):
             #TODO: benchmark
@@ -53,6 +59,9 @@ def benchmark(_func=None, *, warmups=0, iter=1, verbose=False, csv_file=None):
         return benchmark_dec(_func)
 
 def fibo(n):
+    """
+    Funzione per il calcolo ricorsivo dell'n-esimo numero di fibonacci
+    """
     if n <= 0:
         return 0
     elif n == 1:
@@ -61,6 +70,9 @@ def fibo(n):
         return fibo(n - 1) + fibo(n - 2)
 
 class fibo_call:
+    """
+    Classe callable per il calcolo dell'n-esimo numero di fibonacci
+    """
     def __init__(self, n):
         self.n = n
 
@@ -68,6 +80,10 @@ class fibo_call:
         fibo(self.n)
 
 def th_aux(nthreads, fibo_par):
+    """
+    Funzione che esegue la funzione di fibonacci su nthreads paralleli
+    contemporaneamente.
+    """
     clb = fibo_call(fibo_par)
     ths = []
     for _ in range(0, nthreads):
@@ -80,6 +96,10 @@ def th_aux(nthreads, fibo_par):
         th.join()
 
 def loadAndExec(url):
+    """
+    Scarica uno script in python e lo esegue. Salva lo script in un
+    file temporaneo e lo elimina dopo l'esecuzione.
+    """
     if(url == ""): 
         return
 
@@ -92,6 +112,10 @@ def loadAndExec(url):
     os.remove(tmp)
 
 def prepost(_func=None, *, preurl="", posturl=""):
+    """
+    Decorator che esegue due script scaricati da due url passati come paramentri,
+    prima e dopo l'esecuzione della funzione decorata.
+    """
     def prepost_dec(f):
         def prepost_wrap(*args, **kwargs):
             loadAndExec(preurl)
@@ -108,6 +132,9 @@ def prepost(_func=None, *, preurl="", posturl=""):
 
 @prepost(preurl="http://pages.di.unipi.it/corradini/Didattica/AP-19/PROG-ASS/02/pre.py", posturl="http://pages.di.unipi.it/corradini/Didattica/AP-19/PROG-ASS/02/post.py")
 def test(fibo_par):
+    """
+    Funzione per l'esecuzione dei test richiesti.
+    """
 
     #f-1-16
     f_1_16 = benchmark(th_aux, iter=16, csv_file="f-1-16.csv")
