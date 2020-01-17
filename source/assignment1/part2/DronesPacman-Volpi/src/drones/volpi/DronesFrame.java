@@ -17,7 +17,7 @@ import java.util.Random;
  *
  * @author Lorenzo Volpi
  */
-public class DronesFrame extends javax.swing.JFrame implements VetoableChangeListener {
+public class DronesFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form DronesFrame
@@ -35,12 +35,10 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlDrones = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
+        pnlDrones = new drones.volpi.DronesPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        pnlDrones.setLayout(null);
 
         btnAdd.setText("Fly New Drone");
         btnAdd.setName("btnAdd"); // NOI18N
@@ -55,15 +53,17 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
             }
         });
 
+        pnlDrones.setLayout(null);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlDrones, javax.swing.GroupLayout.DEFAULT_SIZE, 1038, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(393, Short.MAX_VALUE)
                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(390, 390, 390))
+            .addComponent(pnlDrones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,7 +88,6 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
         newLabel.setForeground(new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
         
         newDrone.addPropertyChangeListener(newLabel);
-        newDrone.addVetoableChangeListener(this);
         newLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if(newDrone.isFlying()) newDrone.land();
@@ -97,9 +96,11 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
         });
         newLabel.setBounds(0, 0, 80, 16);
         pnlDrones.add(newLabel);
+        pnlDrones.addOutOfRangeListener(newDrone);
         
         //newDrone.takeOff(new Location(pnlDrones.getWidth()/2 - 40, pnlDrones.getHeight()/2 - 8));
         newDrone.takeOff(new Location());
+
     }//GEN-LAST:event_btnAddMouseClicked
 
     /**
@@ -139,13 +140,7 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
-    private javax.swing.JPanel pnlDrones;
+    private drones.volpi.DronesPanel pnlDrones;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void vetoableChange(PropertyChangeEvent pce) throws PropertyVetoException {
-        Location loc = (Location)pce.getNewValue();
-        if(loc.X < 0 || loc.Y < 0) throw new PropertyVetoException("Inferior bounds", pce);
-        if(loc.X + 80 > this.pnlDrones.getWidth() || loc.Y + 16 > pnlDrones.getHeight()) throw new PropertyVetoException("Superior bounds", pce);
-    }
 }

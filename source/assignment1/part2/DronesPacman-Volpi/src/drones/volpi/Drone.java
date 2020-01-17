@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Lorenzo Volpi
  */
-public class Drone implements Serializable {
+public class Drone implements Serializable, OutOfRangeListener {
     
     public static final String PROP_LOC = "loc";
     public static final String PROP_FLYING = "flying";
@@ -85,5 +85,21 @@ public class Drone implements Serializable {
     
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(listener);
+    }
+    
+    @Override
+    public void outOfRange(OutOfRangeEvent evt) {
+        int x = this.loc.X, y = this.loc.Y;
+        //System.out.print(x + "," + y);
+        if(x < 0) x = (int)(evt.getXRange() + x);
+        else if(x > evt.getXRange()) x = (int)(x - evt.getXRange());
+
+        if(y < 0) y = (int)(evt.getYRange() + y);
+        else if(y > evt.getYRange()) y = (int)(y - evt.getYRange());
+           
+        //System.out.println(" -> " + x + "," + y);
+        if(x != this.loc.X && y != this.loc.Y) 
+            this.setLoc(new Location(x, y));
+        
     }
 }

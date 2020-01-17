@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,9 +27,11 @@ public class Drone implements Serializable {
     private Boolean flying = false;
     
     private PropertyChangeSupport pcs;
+    private VetoableChangeSupport vcs;
     
     public Drone() {
         pcs = new PropertyChangeSupport(this);
+        vcs = new VetoableChangeSupport(this);
     }
     
     public Location getLoc() {
@@ -36,6 +40,13 @@ public class Drone implements Serializable {
 
     private void setLoc(Location newLoc) {
         Location oldLoc = this.loc;
+        try{
+            vcs.fireVetoableChange(PROP_LOC, oldLoc, newLoc);
+        } catch (PropertyVetoException ex) {
+            newLoc.X = 0;
+            newLoc.Y = 0;
+        }
+        
         this.loc = new Location(newLoc.X, newLoc.Y);
         pcs.firePropertyChange(PROP_LOC, oldLoc, newLoc);
     }
@@ -83,5 +94,13 @@ public class Drone implements Serializable {
     
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(listener);
+    }
+    
+    public void addVetoableChangeListener(VetoableChangeListener listener) {
+        vcs.addVetoableChangeListener(listener);
+    }
+    
+    public void removeVetoableChangeListener(VetoableChangeListener listener) {
+        vcs.removeVetoableChangeListener(listener);
     }
 }

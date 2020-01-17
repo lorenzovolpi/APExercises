@@ -17,7 +17,7 @@ import java.util.Random;
  *
  * @author Lorenzo Volpi
  */
-public class DronesFrame extends javax.swing.JFrame implements VetoableChangeListener {
+public class DronesFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form DronesFrame
@@ -88,7 +88,6 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
         newLabel.setForeground(new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
         
         newDrone.addPropertyChangeListener(newLabel);
-        newDrone.addVetoableChangeListener(this);
         newLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if(newDrone.isFlying()) newDrone.land();
@@ -98,9 +97,8 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
         newLabel.setBounds(0, 0, 80, 16);
         pnlDrones.add(newLabel);
         
-        newDrone.takeOff(new Location(pnlDrones.getWidth()/2 - 40, pnlDrones.getHeight()/2 - 8));
-        //newDrone.takeOff(new Location());
-
+        //newDrone.takeOff(new Location(pnlDrones.getWidth()/2 - 40, pnlDrones.getHeight()/2 - 8));
+        newDrone.takeOff(new Location());
     }//GEN-LAST:event_btnAddMouseClicked
 
     /**
@@ -143,10 +141,5 @@ public class DronesFrame extends javax.swing.JFrame implements VetoableChangeLis
     private javax.swing.JPanel pnlDrones;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void vetoableChange(PropertyChangeEvent pce) throws PropertyVetoException {
-        Location loc = (Location)pce.getNewValue();
-        if(loc.X < 0 || loc.Y < 0) throw new PropertyVetoException("Inferior bounds", pce);
-        if(loc.X + 80 > this.pnlDrones.getWidth() || loc.Y + 16 > pnlDrones.getHeight()) throw new PropertyVetoException("Superior bounds", pce);
-    }
+    
 }
