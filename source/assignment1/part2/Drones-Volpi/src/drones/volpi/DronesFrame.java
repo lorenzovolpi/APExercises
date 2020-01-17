@@ -2,9 +2,6 @@ package drones.volpi;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
 import java.util.Random;
 
 /*
@@ -14,7 +11,9 @@ import java.util.Random;
  */
 
 /**
- *
+ * JFrame che contiene un JPanel nel quale vengono mostrati i droni e un JButton
+ * che al click del mouse crea un nuovo drone e lo fa volare.
+ * 
  * @author Lorenzo Volpi
  */
 public class DronesFrame extends javax.swing.JFrame {

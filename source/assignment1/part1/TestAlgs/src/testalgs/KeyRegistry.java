@@ -5,13 +5,13 @@
  */
 package testalgs;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
- *
+ * Classe che mantiene un registro in cui ad ogni oggetto Class è associata
+ * una chiave crittografica che da essa deve essere utilizzata.
+ * 
  * @author Lorenzo Volpi
  */
 public class KeyRegistry {

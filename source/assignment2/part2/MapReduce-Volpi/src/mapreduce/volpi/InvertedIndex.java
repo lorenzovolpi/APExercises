@@ -76,7 +76,7 @@ public class InvertedIndex extends MapReduce<String, Pair<String, Integer>, Stri
 
     @Override
     protected void write(Stream<Pair<String, String>> is, Path path) {
-        File f = Paths.get(path.toAbsolutePath().toString(), "result.csv").toFile();
+        File f = Paths.get(path.toAbsolutePath().toString(), "ii_result.csv").toFile();
         try {
             PrintStream ps = new PrintStream(f);
             is.sorted(Comparator.comparing(Pair::getKey)).

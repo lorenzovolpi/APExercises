@@ -29,6 +29,11 @@ import java.util.logging.Logger;
  */
 public class TestAlgs {
     
+    /**
+     * Funzione che carica da file le classi crittografiche da analizzare e testare.
+     * @param dir Directory padre della cartella crypto
+     * @return Un Map che ad ogni nome di classe associa l'oggetto classe caricato.
+     */
     private static Map<String, Class> loadClasses(Path dir) {
         Map<String, Class> res = new HashMap<>();
         try {
@@ -55,6 +60,12 @@ public class TestAlgs {
         return res;
     }
     
+    /**
+     * Carica da file il KeyRegistry delle classi e chiavi crittografiche.
+     * @param dir Directory padre di crypto.
+     * @param classes Map delle classi caricate.
+     * @return Un KeyRegistry contenente le varie chiavi caricate.
+     */
     private static KeyRegistry loadRegistry(Path dir, Map<String, Class> classes) {
         KeyRegistry r = new KeyRegistry();
         try {

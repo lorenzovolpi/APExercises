@@ -14,7 +14,11 @@ import java.util.Random;
  */
 
 /**
- *
+ * JFrame che contiene un JPanel nel quale vengono mostrati i droni e un JButton
+ * che al click del mouse crea un nuovo drone e lo fa volare. Implementa inoltre
+ * VetoableChangeListener e pone il veto su ogni drone che cerca di posizionarsi 
+ * all'esterno dei bounds del JPanel.
+ * 
  * @author Lorenzo Volpi
  */
 public class DronesFrame extends javax.swing.JFrame implements VetoableChangeListener {

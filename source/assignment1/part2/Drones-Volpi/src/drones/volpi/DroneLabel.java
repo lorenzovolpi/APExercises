@@ -11,7 +11,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 
 /**
- *
+ * Estensione di JLabel atta a rappresentare un drone. In ogni momento mostra se
+ * il drone sta volando e le sue coordinate attraverso il testo che rappresenta.
+ * 
  * @author Lorenzo Volpi
  */
 public class DroneLabel extends JLabel implements PropertyChangeListener {

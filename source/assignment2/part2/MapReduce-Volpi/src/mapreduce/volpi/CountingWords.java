@@ -8,15 +8,10 @@ package mapreduce.volpi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,7 +70,7 @@ public class CountingWords extends MapReduce<String, Integer, Integer>{
     protected void write(Stream<Pair<String, Integer>> is, Path path) {
         Writer w = new Writer();
         
-        File f = Paths.get(path.toAbsolutePath().toString(), "result.csv").toFile();
+        File f = Paths.get(path.toAbsolutePath().toString(), "cw_result.csv").toFile();
         try {
             w.write(f, is);
         } catch (FileNotFoundException ex) {

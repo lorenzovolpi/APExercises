@@ -10,11 +10,13 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * JavaBean che mantiene due proprietà di sola lettura che indicano se il drone sta volando
+ * e la sua posizione attuale, con rispettivi getter. Fornisce anche metodi pubblici per
+ * far partire il volo del drone e per terminarlo e prevede dei PropertyChangeEvent per 
+ * entrambe le proprietà. Prevede inoltre un VetoableChangeEvent per la proprietà Loc.
+ * 
  * @author Lorenzo Volpi
  */
 public class Drone implements Serializable {
@@ -96,10 +98,18 @@ public class Drone implements Serializable {
         pcs.removePropertyChangeListener(listener);
     }
     
+    /**
+     * Aggiunge un VetoableChangeListener per la proprietà loc.
+     * @param listener 
+     */
     public void addVetoableChangeListener(VetoableChangeListener listener) {
         vcs.addVetoableChangeListener(listener);
     }
     
+    /**
+     * Aggiunge un VetoableChangeListener per la proprietà loc.
+     * @param listener 
+     */
     public void removeVetoableChangeListener(VetoableChangeListener listener) {
         vcs.removeVetoableChangeListener(listener);
     }

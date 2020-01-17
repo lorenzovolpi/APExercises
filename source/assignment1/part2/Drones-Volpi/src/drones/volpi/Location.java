@@ -6,7 +6,8 @@
 package drones.volpi;
 
 /**
- *
+ * Classe di supporto per indicare la posizione di un drone.
+ * 
  * @author Lorenzo Volpi
  */
 public class Location {
