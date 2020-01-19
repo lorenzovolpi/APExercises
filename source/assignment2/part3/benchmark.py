@@ -31,10 +31,10 @@ def benchmark(_func=None, *, warmups=0, iter=1, verbose=False, csv_file=None):
                 iter_times.append(run_time)
 
             if verbose:
-                for i in range(0, warmups):
-                    print("Warmup #" + str(i+1) + " took: " + str(warmups_times[i]))
-                for i in range(0, iter):
-                    print("Iteration #" + str(i+1) + " took: " + str(iter_times[i]))
+                for (i, w) in enumerate(warmups_times):
+                    print("Warmup #" + str(i+1) + " took: " + str(w))
+                for (i, t) in enumerate(iter_times):
+                    print("Iteration #" + str(i+1) + " took: " + str(t))
 
             average = sum(iter_times) / iter
             variance = sum([(i - average) ** 2 for i in iter_times]) / iter
@@ -46,10 +46,10 @@ def benchmark(_func=None, *, warmups=0, iter=1, verbose=False, csv_file=None):
                 with open(csv_file, 'w', newline='') as csvf:
                     csv_writer = csv.writer(csvf, delimiter=',')
                     csv_writer.writerow(["run num", "is warmup", "timing"])
-                    for i in range(0, warmups):
-                        csv_writer.writerow([str(i+1), "yes", str(warmups_times[i]) + "s"])
-                    for i in range(0, iter):
-                        csv_writer.writerow([str(i+1), "no", str(iter_times[i]) + "s"])
+                    for (i, w) in enumerate(warmups_times):
+                        csv_writer.writerow([str(i+1), "yes", str(w) + "s"])
+                    for (i, t) in enumerate(iter_times):
+                        csv_writer.writerow([str(i+1), "no", str(t) + "s"])
 
         return benchmark_wrap
     
